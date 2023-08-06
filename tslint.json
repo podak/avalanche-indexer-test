@@ -1,0 +1,49 @@
+{
+    "extends": "tslint:recommended",
+    "rules": {
+        "curly": [
+            true,
+            "ignore-same-line"
+        ],
+        "member-ordering": false,
+        "no-console": false,
+        "no-shadowed-variable": false,
+        "no-unused-expression": false,
+        "no-unused-expression-chai": true,
+        "no-consecutive-blank-lines": false,
+        "object-literal-shorthand": false,
+        "object-literal-sort-keys": false,
+        "one-variable-per-declaration": false,
+        "interface-name": false,
+        "only-arrow-functions": [
+            true,
+            "allow-declarations",
+            "allow-named-functions"
+        ],
+        "ordered-imports": [
+            false,
+            {
+                "import-sources-order": "case-insensitive",
+                "named-imports-order": "case-insensitive"
+            }
+        ],
+        "quotemark": [
+            true,
+            "single"
+        ],
+        "trailing-comma": false,
+        "variable-name": [true, "allow-snake-case", "allow-pascal-case"]
+    },
+    "rulesDirectory": [
+        "node_modules/tslint-no-unused-expression-chai/rules"
+    ],
+    "linterOptions": {
+        "exclude": [
+            "node_modules",
+            "dist",
+            ".git",
+            "src/migrations/*.ts",
+            "src/schema/*.ts"
+        ]
+    }
+}

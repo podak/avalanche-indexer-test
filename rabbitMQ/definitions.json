@@ -1,0 +1,132 @@
+{
+    "rabbit_version": "3.10.7",
+    "rabbitmq_version": "3.10.7",
+    "product_name": "RabbitMQ",
+    "product_version": "3.10.7",
+    "users": [
+        {
+            "name": "isone-queues",
+            "password_hash": "AqnttPBI/epozG2RI1+UOInu5YJHKXqdeoCOelB8Z0vAdUtO",
+            "hashing_algorithm": "rabbit_password_hashing_sha256",
+            "tags": [
+                "administrator"
+            ],
+            "limits": {}
+        }
+    ],
+    "vhosts": [
+        {
+            "name": "/ADML"
+        }
+    ],
+    "permissions": [
+        {
+            "user": "isone-queues",
+            "vhost": "/ADML",
+            "configure": ".*",
+            "write": ".*",
+            "read": ".*"
+        }
+    ],
+    "topic_permissions": [],
+    "parameters": [],
+    "global_parameters": [
+        {
+            "name": "internal_cluster_id",
+            "value": "rabbitmq-cluster-id-QdRkUobXAPbYDeXwSlcr6g"
+        }
+    ],
+    "policies": [],
+    "queues": [
+        {
+            "name": "ISONE.Dispatch.HMI.Queue",
+            "vhost": "/ADML",
+            "durable": true,
+            "auto_delete": false,
+            "arguments": {
+                "x-queue-type": "classic"
+            }
+        },
+        {
+            "name": "ISONE.Ack.Agent",
+            "vhost": "/ADML",
+            "durable": true,
+            "auto_delete": false,
+            "arguments": {
+                "x-queue-type": "classic"
+            }
+        },
+        {
+            "name": "ISONE.Dispatch.FDR.Queue",
+            "vhost": "/ADML",
+            "durable": true,
+            "auto_delete": false,
+            "arguments": {
+                "x-queue-type": "classic"
+            }
+        },
+        {
+            "name": "ISONE.Dispatch.Send.Queue",
+            "vhost": "/ADML",
+            "durable": true,
+            "auto_delete": false,
+            "arguments": {
+                "x-queue-type": "classic"
+            }
+        }
+    ],
+    "exchanges": [
+        {
+            "name": "ISONE.Ack",
+            "vhost": "/ADML",
+            "type": "fanout",
+            "durable": true,
+            "auto_delete": false,
+            "internal": false,
+            "arguments": {}
+        },
+        {
+            "name": "ISONE.Dispatch.Send",
+            "vhost": "/ADML",
+            "type": "fanout",
+            "durable": true,
+            "auto_delete": false,
+            "internal": false,
+            "arguments": {}
+        }
+    ],
+    "bindings": [
+        {
+            "source": "ISONE.Ack",
+            "vhost": "/ADML",
+            "destination": "ISONE.Ack.Agent",
+            "destination_type": "queue",
+            "routing_key": "",
+            "arguments": {}
+        },
+        {
+            "source": "ISONE.Dispatch.Send",
+            "vhost": "/ADML",
+            "destination": "ISONE.Dispatch.FDR.Queue",
+            "destination_type": "queue",
+            "routing_key": "",
+            "arguments": {}
+        },
+        {
+            "source": "ISONE.Dispatch.Send",
+            "vhost": "/ADML",
+            "destination": "ISONE.Dispatch.HMI.Queue",
+            "destination_type": "queue",
+            "routing_key": "",
+            "arguments": {}
+        },
+        {
+            "source": "ISONE.Dispatch.Send",
+            "vhost": "/ADML",
+            "destination": "ISONE.Dispatch.Send.Queue",
+            "destination_type": "queue",
+            "routing_key": "",
+            "arguments": {}
+        }
+    ]
+}

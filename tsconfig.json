@@ -1,0 +1,30 @@
+{
+    "compilerOptions": {
+        "experimentalDecorators": true,
+        "module": "commonjs",
+        "target": "es2020",
+        "sourceMap": false,
+        "resolveJsonModule": true,
+        "esModuleInterop": true,
+        "emitDecoratorMetadata": true,
+        "moduleResolution": "node",
+        "rootDir": "./",
+        "outDir": "dist/",
+        "lib": [
+            "es2020",
+            "dom"
+        ]
+    },
+    "files": [
+        "node_modules/@types/node/index.d.ts",
+        "node_modules/@types/mocha/index.d.ts"
+    ],
+    "include": [
+        "src/**/*",
+        "test/**/*",
+        "test-util/**/*",
+        "prototypes/client",
+        "prototypes/server"    
+    ],
+    "exclude": []
+}
