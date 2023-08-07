@@ -1,38 +1,38 @@
 import {DBClient} from '../../src/services/db';
 import {config} from '../../src/config';
-import { AddressDB, BlockDB, AvalancheTx, DownloadDB } from '../../src/types';
+import { AddressDB, BlockDB, TransactionDB, DownloadDB } from '../../src/types';
 import { hash } from '../../src/utils'
 
 export const db = new DBClient();
 
-export async function setupAddresses(address: Partial<AddressDB>[]) {
+export async function setupAddresses(address: Partial<AddressDB>[]): Promise<void> {
     await db.addresses.insertMany(address);
 }
 
-export async function setupBlocks(blocks: Partial<BlockDB>[]) {
+export async function setupBlocks(blocks: Partial<BlockDB>[]): Promise<void> {
     await db.blocks.insertMany(blocks);
 }
 
-export async function setupTransactions(transactions: Partial<AvalancheTx>[]) {
-    await db.blocks.insertMany(transactions);
+export async function setupTransactions(transactions: Partial<TransactionDB>[]): Promise<void> {
+    await db.transactions.insertMany(transactions);
 }
 
-export async function setupDownloads(downloads: Partial<DownloadDB>[]) {
-    await db.blocks.insertMany(downloads);
+export async function setupDownloads(downloads: Partial<DownloadDB>[]): Promise<void> {
+    await db.downloads.insertMany(downloads);
 }
 
-export async function cleanAddresses() {
+export async function cleanAddresses(): Promise<void> {
     await db.addresses.deleteMany({});
 }
 
-export async function cleanBlocks() {
+export async function cleanBlocks(): Promise<void> {
     await db.blocks.deleteMany({});
 }
 
-export async function cleanTransactions() {
+export async function cleanTransactions(): Promise<void> {
     await db.transactions.deleteMany({});
 }
-export async function cleanDownloads() {
+export async function cleanDownloads(): Promise<void> {
     await db.downloads.deleteMany({});
 }
 
@@ -88,9 +88,9 @@ export function dbBlockFixture(
 }
 
 export function dbTransactionFixture(
-    nonDefaultProps: Partial<AvalancheTx> = {}):
-    AvalancheTx {
-    const defaults: AvalancheTx = {
+    nonDefaultProps: Partial<TransactionDB> = {}):
+    TransactionDB {
+    const defaults: TransactionDB = {
         hash: randomHash(),
         blockHash: randomHash(),
         blockNumber: randomBlockNumber(),

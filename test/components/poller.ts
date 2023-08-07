@@ -15,16 +15,25 @@ import {
     blockByNumberResponseFixture,
     lastBlockResponseFixture
 } from '../fixtures/avalance';
+import {
+    DownloadModel
+} from '../../src/schema/download';
+import {
+    DownloadQueue
+} from '../../src/types';
+import {
+    monitorQueue
+} from '../fixtures/rabbit-mq';
 import { config } from '../../src/config';
 
 describe('Poller testing', () => {
 
     beforeEach(async () => {
         nock.cleanAll();
-        await db.connect();
     });
 
     afterEach(async () => {
+        await db.connect();
         await cleanDownloads();
         await cleanBlocks();
         await db.disconnect();
@@ -38,9 +47,10 @@ describe('Poller testing', () => {
         });
 
         const dbDownload = dbDownloadFixture({
-            blockNumber: lastBlock - config.BLOCKS_SIZE + 1
+            blockNumber: lastBlock + 1 - config.BLOCKS_SIZE
         });
 
+        await db.connect();
         await setupDownloads([dbDownload]);
         await setupBlocks([dbBlock]);
 
@@ -55,6 +65,26 @@ describe('Poller testing', () => {
             }
         }));
 
+        // listen to messages published in the rabbit download queue
+        const queue = await monitorQueue<DownloadQueue> (config.DOWNLOAD_QUEUE_NAME, DownloadModel);
+
         await process();
+
+        // need to reconnect to db because db.disconnect called inside process
+        // kills all active connections
+        await db.connect();
+        const storedDownloads = await db.downloads.find();
+        const queuedDownloads = queue.getMessages();
+        // we should be downloading 10000 blocks - the 2 already downloaded/initiated
+        // stored downloads should be 9999 (9998 + previous stored one)
+        expect(storedDownloads.length).to.equal(9999);
+        expect(storedDownloads[1]).to.deep.include({
+            blockNumber: lastBlock - config.BLOCKS_SIZE + 2
+        });
+        // queued downloads should be 9998
+        expect(queuedDownloads.length).to.equal(9998);
+        expect(queuedDownloads[0]).to.deep.include({
+            blockNumber: lastBlock - config.BLOCKS_SIZE + 2
+        });
     });
 });

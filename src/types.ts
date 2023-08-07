@@ -1,4 +1,4 @@
-export interface AvalancheBlock {
+interface BlockBase {
     baseFeePerGas: number,
     difficulty: number,
     gasLimit: number,
@@ -15,11 +15,10 @@ export interface AvalancheBlock {
     stateRoot: string,
     timestamp: string,
     totalDifficulty: number,
-    transactions: AvalancheTx[],
     transactionsRoot: string
 }
 
-export interface AvalancheTx {
+interface TransactionBase {
     blockHash: string,
     blockNumber: number,
     from: string,
@@ -29,7 +28,7 @@ export interface AvalancheTx {
     maxPriorityFeePerGase: number,
     hash: string,
     input: string,
-    nonce: number
+    nonce: number,
     to: string,
     transactionIndex: number,
     value: number,
@@ -41,35 +40,34 @@ export interface AvalancheTx {
     s: string
 }
 
-export interface AddressDB {
+interface AddressBase {
     hash: string,
     balance: number,
     sentTx: string[],
     receivedTx: string[]
 }
 
-export interface DownloadDB {
+interface DownloadBase {
     blockNumber: number,
-    dttm: Date
 }
 
-export interface BlockDB {
-    baseFeePerGas: number,
-    difficulty: number,
-    gasLimit: number,
-    gasUsed: number,
-    hash: string,
-    logsBloom: string,
-    miner: string,
-    mixHash: string,
-    nonce: string,
-    number: number,
-    parentHash: string,
-    receiptsRoot: string,
-    size: number,
-    stateRoot: string,
-    timestamp: string,
-    totalDifficulty: number,
-    transactions: string[],
-    transactionsRoot: string
+export interface AddressDB extends AddressBase {}
+export interface AddressQueue extends AddressBase {}
+
+export interface DownloadDB extends DownloadBase {
+    dttm: Date
 }
+export interface DownloadQueue extends DownloadBase {
+    dttm: string
+}
+
+export interface TransactionDB extends TransactionBase {}
+export interface TransactionQueue extends TransactionBase {}
+
+export interface BlockDB extends BlockBase {
+    transactions: TransactionDB[]
+}
+export interface BlockQueue extends BlockBase {
+    transactions: string[]
+}
+

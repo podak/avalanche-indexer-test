@@ -20,7 +20,8 @@
     "lodash": "4.17.20",
     "winston": "3.10.0",
     "axios": "1.4.0",
-    "mongoose": "7.4.2"
+    "mongoose": "7.4.2",
+    "amqplib": "0.10.3"
   },
   "devDependencies": {
     "@types/md5": "2.3.0",

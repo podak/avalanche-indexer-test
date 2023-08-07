@@ -1,4 +1,4 @@
-export const AckMessageModel = {
+export const AssetModel = {
 	"$schema": "http://json-schema.org/draft-07/schema",
 	"$id": "https://geob.enelint.global/dispatch-ack.json",
 	"type": "object",

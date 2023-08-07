@@ -5,8 +5,8 @@
     "product_version": "3.10.7",
     "users": [
         {
-            "name": "isone-queues",
-            "password_hash": "AqnttPBI/epozG2RI1+UOInu5YJHKXqdeoCOelB8Z0vAdUtO",
+            "name": "indexer",
+            "password_hash": "fXzW8NiHvxPMYFWcuqOOMJACCMr17kvEFKs6tFFw0+2987iO",
             "hashing_algorithm": "rabbit_password_hashing_sha256",
             "tags": [
                 "administrator"
@@ -16,13 +16,13 @@
     ],
     "vhosts": [
         {
-            "name": "/ADML"
+            "name": "/AVAX"
         }
     ],
     "permissions": [
         {
-            "user": "isone-queues",
-            "vhost": "/ADML",
+            "user": "indexer",
+            "vhost": "/AVAX",
             "configure": ".*",
             "write": ".*",
             "read": ".*"
@@ -39,8 +39,8 @@
     "policies": [],
     "queues": [
         {
-            "name": "ISONE.Dispatch.HMI.Queue",
-            "vhost": "/ADML",
+            "name": "Download.Queue",
+            "vhost": "/AVAX",
             "durable": true,
             "auto_delete": false,
             "arguments": {
@@ -48,8 +48,8 @@
             }
         },
         {
-            "name": "ISONE.Ack.Agent",
-            "vhost": "/ADML",
+            "name": "Update.Transaction.Queue",
+            "vhost": "/AVAX",
             "durable": true,
             "auto_delete": false,
             "arguments": {
@@ -57,8 +57,8 @@
             }
         },
         {
-            "name": "ISONE.Dispatch.FDR.Queue",
-            "vhost": "/ADML",
+            "name": "Update.Address.Queue",
+            "vhost": "/AVAX",
             "durable": true,
             "auto_delete": false,
             "arguments": {
@@ -66,8 +66,8 @@
             }
         },
         {
-            "name": "ISONE.Dispatch.Send.Queue",
-            "vhost": "/ADML",
+            "name": "Update.Block.Queue",
+            "vhost": "/AVAX",
             "durable": true,
             "auto_delete": false,
             "arguments": {
@@ -77,8 +77,8 @@
     ],
     "exchanges": [
         {
-            "name": "ISONE.Ack",
-            "vhost": "/ADML",
+            "name": "Download",
+            "vhost": "/AVAX",
             "type": "fanout",
             "durable": true,
             "auto_delete": false,
@@ -86,9 +86,9 @@
             "arguments": {}
         },
         {
-            "name": "ISONE.Dispatch.Send",
-            "vhost": "/ADML",
-            "type": "fanout",
+            "name": "Update",
+            "vhost": "/AVAX",
+            "type": "direct",
             "durable": true,
             "auto_delete": false,
             "internal": false,
@@ -97,35 +97,35 @@
     ],
     "bindings": [
         {
-            "source": "ISONE.Ack",
-            "vhost": "/ADML",
-            "destination": "ISONE.Ack.Agent",
+            "source": "Download",
+            "vhost": "/AVAX",
+            "destination": "Download.Queue",
             "destination_type": "queue",
             "routing_key": "",
             "arguments": {}
         },
         {
-            "source": "ISONE.Dispatch.Send",
-            "vhost": "/ADML",
-            "destination": "ISONE.Dispatch.FDR.Queue",
+            "source": "Update",
+            "vhost": "/AVAX",
+            "destination": "Update.Transaction.Queue",
             "destination_type": "queue",
-            "routing_key": "",
+            "routing_key": "transaction",
             "arguments": {}
         },
         {
-            "source": "ISONE.Dispatch.Send",
-            "vhost": "/ADML",
-            "destination": "ISONE.Dispatch.HMI.Queue",
+            "source": "Update",
+            "vhost": "/AVAX",
+            "destination": "Update.Address.Queue",
             "destination_type": "queue",
-            "routing_key": "",
+            "routing_key": "address",
             "arguments": {}
         },
         {
-            "source": "ISONE.Dispatch.Send",
-            "vhost": "/ADML",
-            "destination": "ISONE.Dispatch.Send.Queue",
+            "source": "Update",
+            "vhost": "/AVAX",
+            "destination": "Update.Block.Queue",
             "destination_type": "queue",
-            "routing_key": "",
+            "routing_key": "block",
             "arguments": {}
         }
     ]

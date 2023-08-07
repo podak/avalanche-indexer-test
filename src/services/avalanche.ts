@@ -1,7 +1,7 @@
 import axios from 'axios';
 import {config} from '../config';
 import {logger} from '../logger';
-import { AvalancheBlock, AvalancheTx } from '../types';
+import { BlockDB, TransactionDB } from '../types';
 
 const AVALANCHE_BASE = `${config.AVALANCHE_NODE_URL}:${config.AVALANCHE_NODE_PORT}/ext/bc/C/rpc`;
 const SHARED_PARAMS = {
@@ -28,7 +28,7 @@ export async function getLastBlockNumber(): Promise<number> {
     return blockNumber;
 }
 
-export async function getBlockByNumber(n: number): Promise<AvalancheBlock> {
+export async function getBlockByNumber(n: number): Promise<BlockDB> {
     let resp;
 
     try {
@@ -49,7 +49,7 @@ export async function getBlockByNumber(n: number): Promise<AvalancheBlock> {
     return responseToBlock(block);
 }
 
-function responseToBlock(data: any): AvalancheBlock {
+function responseToBlock(data: any): BlockDB {
     // filtering out some of the fields
     const {
         baseFeePerGas,
@@ -96,7 +96,7 @@ function responseToBlock(data: any): AvalancheBlock {
     }
 }
 
-function responseToTx(data: any): AvalancheTx {
+function responseToTx(data: any): TransactionDB {
     // filtering out some of the fields
     const {
         blockHash,
