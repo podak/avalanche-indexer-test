@@ -7,8 +7,10 @@ services:
         command: ['dumb-init', 'npm', 'start']
         depends_on:
             - 'rabbit'
+            - 'db'
         links:
             - 'rabbit'
+            - 'db'
         volumes:
             - './:/app'
     poller:
@@ -18,16 +20,21 @@ services:
         command: ['dumb-init', 'npm', 'start']
         depends_on:
             - 'rabbit'
+            - 'db'
         links:
             - 'rabbit'
+            - 'db'
         volumes:
             - './:/app'
+
     db:
         image: 'mongo:5.0'
         restart: always
         environment:
-            MONGO_INITDB_ROOT_USERNAME: 'mongouser'
-            MONGO_INITDB_ROOT_PASSWORD: 'mongopws'
+            MONGO_INITDB_ROOT_USERNAME: 'indexer-mongo'
+            MONGO_INITDB_ROOT_PASSWORD: 'indexer-mongo'
+        ports:
+            - 27017:27017
 
     rabbit:
         image: 'rabbitmq:3.10.7-management-alpine'
@@ -42,6 +49,10 @@ services:
         volumes:
             - ./rabbitMQ/definitions.json:/opt/definitions.json:ro
             - ./rabbitMQ/configuration.conf:/etc/rabbitmq/rabbitmq.config:ro
+
+volumes:
+  cache:
+    driver: local
 
 
 

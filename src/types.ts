@@ -40,3 +40,36 @@ export interface AvalancheTx {
     r: string,
     s: string
 }
+
+export interface AddressDB {
+    hash: string,
+    balance: number,
+    sentTx: string[],
+    receivedTx: string[]
+}
+
+export interface DownloadDB {
+    blockNumber: number,
+    dttm: Date
+}
+
+export interface BlockDB {
+    baseFeePerGas: number,
+    difficulty: number,
+    gasLimit: number,
+    gasUsed: number,
+    hash: string,
+    logsBloom: string,
+    miner: string,
+    mixHash: string,
+    nonce: string,
+    number: number,
+    parentHash: string,
+    receiptsRoot: string,
+    size: number,
+    stateRoot: string,
+    timestamp: string,
+    totalDifficulty: number,
+    transactions: string[],
+    transactionsRoot: string
+}

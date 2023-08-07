@@ -1,3 +1,9 @@
+const { createHash } = require('crypto');
+
+export function hash(str: string) {
+    return createHash('sha256').update(str).digest('hex');
+}
+
 export function overwriteFromEnv(config: {[key: string]: any}): void {
     Object.keys(config).forEach((k) => {
         const cast = fromString(typeof config[k], process.env[k]);

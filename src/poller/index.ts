@@ -7,6 +7,7 @@ import {
     getLastBlockNumber,
     getBlockByNumber 
 } from '../services/avalanche';
+import { DBClient } from '../services/db';
 
 export async function main(): Promise<void> {
 
@@ -21,19 +22,27 @@ export async function main(): Promise<void> {
 }
 
 export async function process(): Promise<void> {
+    const db = new DBClient();
+    await db.connect();
+
     const blockNumber = await getLastBlockNumber();
-    await getBlockByNumber(blockNumber);
-    // get current block number from node
-    // check initialization flag in cache
-    // if true, start initialization procedure
-        // download last 10000 blocks asap
-            // batch of requests in parallel? (Promise all)
-        // send every block info to queue
-        // set initialization flag to false
-    // else, download only latest block 
-        // download block by number
-        // send block info to queue
-    // see how much time is left before next cycle
-    // sleep remaining time
+    const oldestBlock = blockNumber - config.BLOCKS_SIZE;
+
+    // check what are the missing blocks
+    const missing = await getMissingBlocks(db, oldestBlock);
+
+    console.log(missing);
+}
+
+async function getMissingBlocks(
+    db: DBClient,
+    oldestBlock: number
+): Promise<number[]> {
+    const blockNumbersSet =[...Array(config.BLOCKS_SIZE).keys()].map((bn) => (bn + oldestBlock));
+    const storedBlocks = (await db.blocks.find({})).map((b) => (b.number));
+    const blocksInProgress = (await db.downloads.find({})).map((d) => (d.blockNumber));
+    return blockNumbersSet.filter((bn) => (
+        !( storedBlocks.includes(bn) || blocksInProgress.includes(bn) )
+    ));
 }
 
