@@ -1,5 +1,9 @@
 const { createHash } = require('crypto');
 
+export async function asyncSleep(ms: number): Promise<void> {
+    await new Promise(r => setTimeout(r, ms));
+}
+
 export function hash(str: string) {
     return createHash('sha256').update(str).digest('hex');
 }

@@ -26,83 +26,83 @@ export const TransactionModel = {
 	],
 	"properties": {
 		"blockHash": {
-			"$id": "#properties/blockHash",
-			"type": "string",
+			"$id": "#properties/txblockHash",
+			"type": [ "string", "null" ],
 		},
 		"blockNumber": {
-			"$id": "#properties/blockNumber",
-			"type": "number",
+			"$id": "#properties/txblockNumber",
+			"type": [ "number", "null" ],
 		},
 		"from": {
-			"$id": "#properties/from",
-			"type": "string",
+			"$id": "#properties/txfrom",
+			"type": [ "string", "null" ],
 		},
 		"gas": {
-			"$id": "#properties/gas",
-			"type": "number",
+			"$id": "#properties/txgas",
+			"type": [ "number", "null" ],
 		},
 		"gasPrice": {
-			"$id": "#properties/gasPrice",
-			"type": "number",
+			"$id": "#properties/txgasPrice",
+			"type": [ "number", "null" ],
 		},
 		"maxFeePerGas": {
-			"$id": "#properties/maxFeePerGas",
-			"type": "number",
+			"$id": "#properties/txmaxFeePerGas",
+			"type": [ "number", "null" ],
 		},
 		"maxPriorityFeePerGas": {
-			"$id": "#properties/maxPriorityFeePerGas",
-			"type": "number",
+			"$id": "#properties/txmaxPriorityFeePerGas",
+			"type": [ "number", "null" ],
 		},
 		"hash": {
-			"$id": "#properties/hash",
-			"type": "string",
+			"$id": "#properties/txhash",
+			"type": [ "string", "null" ],
 		},
 		"input": {
-			"$id": "#properties/input",
-			"type": "string",
+			"$id": "#properties/txinput",
+			"type": [ "string", "null" ],
 		},
 		"nonce": {
-			"$id": "#properties/nonce",
-			"type": "number",
+			"$id": "#properties/txnonce",
+			"type": [ "number", "null" ],
 		},
 		"to": {
-			"$id": "#properties/to",
-			"type": "string",
+			"$id": "#properties/txto",
+			"type": [ "string", "null" ],
 		},
 		"transactionIndex": {
-			"$id": "#properties/transactionIndex",
-			"type": "number",
+			"$id": "#properties/txtransactionIndex",
+			"type": [ "number", "null" ],
 		},
 		"value": {
-			"$id": "#properties/value",
-			"type": "number",
+			"$id": "#properties/txvalue",
+			"type": [ "number", "null" ],
 		},
 		"type": {
-			"$id": "#properties/type",
-			"type": "string",
+			"$id": "#properties/txtype",
+			"type": [ "string", "null" ],
 		},
 		"accessList": {
-			"$id": "#properties/accessList",
+			"$id": "#properties/txaccessList",
 			"type": "array",
 			"items": {
-				"type": "string"
+				"type": [ "string", "null" ]
 			}
 		},
 		"chainId": {
-			"$id": "#properties/chainId",
-			"type": "number",
+			"$id": "#properties/txchainId",
+			"type": [ "number", "null" ],
 		},
 		"v": {
-			"$id": "#properties/v",
-			"type": "string",
+			"$id": "#properties/txv",
+			"type": [ "string", "null" ],
 		},
 		"r": {
-			"$id": "#properties/r",
-			"type": "string",
+			"$id": "#properties/txr",
+			"type": [ "string", "null" ],
 		},
 		"s": {
-			"$id": "#properties/s",
-			"type": "string",
+			"$id": "#properties/txs",
+			"type": [ "string", "null" ],
 		}
 	}
 };

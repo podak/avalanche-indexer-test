@@ -5,6 +5,7 @@ import {
 } from '../../services/avalanche';
 import { DBClient } from '../../services/db';
 import { RabbitMQWriter } from '../../services/rabbitmq-writer';
+import { asyncSleep } from '../../utils';
 
 export async function main(): Promise<void> {
     logger.info('Avalanche indexer poller started.');
@@ -23,7 +24,17 @@ export async function process(): Promise<void> {
     await db.connect();
     const writer = new RabbitMQWriter();
 
-    const blockNumber = await getLastBlockNumber();
+    let blockNumber;
+    try {
+        blockNumber = await getLastBlockNumber();
+    } catch(e) {
+        if (e.code && e.code === 'ECONNREFUSED') {
+            logger.error('Got ECONNREFUSED, trying to pause for 10 seconds');
+            await asyncSleep(10000);
+            // try with a new loop
+            return;
+        }
+    }
     const oldestBlock = blockNumber - config.BLOCKS_SIZE;
 
     // check what are the missing blocks
@@ -58,7 +69,7 @@ export async function process(): Promise<void> {
     const timeDelta = endDttm - startDttm;
     if (timeDelta < config.POLLER_PERIOD_MS) {
         logger.info('Poller will sleep before next cycle', {sleepMs: timeDelta});
-        await new Promise(r => setTimeout(r, config.POLLER_PERIOD_MS));
+        await asyncSleep(config.POLLER_PERIOD_MS);
     } else {
         logger.warning('Polling has taken more than expected. Next cycle will start immediately', {durationMs: timeDelta});
     }
