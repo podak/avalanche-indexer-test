@@ -1,13 +1,12 @@
-import {logger} from '../logger';
-import {config} from '../config';
+import {logger} from '../../logger';
+import {config} from '../../config';
 import { 
     getLastBlockNumber 
-} from '../services/avalanche';
-import { DBClient } from '../services/db';
-import { RabbitMQWriter } from '../services/rabbitmq-writer';
+} from '../../services/avalanche';
+import { DBClient } from '../../services/db';
+import { RabbitMQWriter } from '../../services/rabbitmq-writer';
 
 export async function main(): Promise<void> {
-
     logger.info('Avalanche indexer poller started.');
     while (true) {
         try {

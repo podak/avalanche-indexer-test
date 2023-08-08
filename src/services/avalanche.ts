@@ -9,6 +9,26 @@ const SHARED_PARAMS = {
     id: config.AVALANCHE_NETWORK_ID
 }
 
+export async function getAddressBalance(hash: string): Promise<number> {
+    let resp;
+
+    try {
+        resp = await axios.post(`${AVALANCHE_BASE}`, {
+            ...SHARED_PARAMS,
+            method: 'eth_getBalance',
+            params: [hash, 'latest']
+        });
+
+    } catch (e) {
+        logger.error('Last block number retrieval failed: ', {error: e});
+        throw e;
+    }
+
+    const blockNumber = parseInt(resp.data.result);
+    logger.info('Retrieved last block number from avalance node: ', {blockNumber});
+    return blockNumber;
+}
+
 export async function getLastBlockNumber(): Promise<number> {
     let resp;
 
@@ -105,7 +125,7 @@ function responseToTx(data: any): TransactionDB {
         gas,
         gasPrice,
         maxFeePerGas,
-        maxPriorityFeePerGase,
+        maxPriorityFeePerGas,
         hash,
         input,
         nonce,
@@ -128,7 +148,7 @@ function responseToTx(data: any): TransactionDB {
         gas: parseInt(gas),
         gasPrice: parseInt(gasPrice),
         maxFeePerGas: parseInt(maxFeePerGas),
-        maxPriorityFeePerGase: parseInt(maxPriorityFeePerGase),
+        maxPriorityFeePerGas: parseInt(maxPriorityFeePerGas),
         hash,
         input,
         nonce: parseInt(nonce),

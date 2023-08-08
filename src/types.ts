@@ -15,7 +15,8 @@ interface BlockBase {
     stateRoot: string,
     timestamp: string,
     totalDifficulty: number,
-    transactionsRoot: string
+    transactionsRoot: string,
+    transactions: TransactionDB[]
 }
 
 interface TransactionBase {
@@ -25,7 +26,7 @@ interface TransactionBase {
     gas: number,
     gasPrice: number,
     maxFeePerGas: number,
-    maxPriorityFeePerGase: number,
+    maxPriorityFeePerGas: number,
     hash: string,
     input: string,
     nonce: number,
@@ -42,17 +43,21 @@ interface TransactionBase {
 
 interface AddressBase {
     hash: string,
-    balance: number,
-    sentTx: string[],
-    receivedTx: string[]
+    balance?: number
 }
 
 interface DownloadBase {
     blockNumber: number,
 }
 
-export interface AddressDB extends AddressBase {}
-export interface AddressQueue extends AddressBase {}
+export interface AddressDB extends AddressBase {
+    sentTx: string[],
+    receivedTx: string[]
+}
+export interface AddressQueue extends AddressBase {
+    newSentTx: string[],
+    newReceivedTx: string[]
+}
 
 export interface DownloadDB extends DownloadBase {
     dttm: Date
@@ -64,10 +69,22 @@ export interface DownloadQueue extends DownloadBase {
 export interface TransactionDB extends TransactionBase {}
 export interface TransactionQueue extends TransactionBase {}
 
-export interface BlockDB extends BlockBase {
-    transactions: TransactionDB[]
+export interface BlockDB extends BlockBase {}
+export interface BlockQueue extends BlockBase {}
+
+export enum QueueRouteKeys {
+    UPDATE_BLOCK = 'block',
+    UPDATE_TRANSACTION = 'transaction',
+    UPDATE_ADDRESS = 'address'
 }
-export interface BlockQueue extends BlockBase {
-    transactions: string[]
+
+export interface BnTiSortedTxRequest {
+    type: string,
+    address: string
+}
+
+export interface AddressTxNumberRequest {
+    type: string,
+    address: string
 }
 

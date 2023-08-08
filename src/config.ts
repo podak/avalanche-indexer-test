@@ -27,7 +27,7 @@ export const config = {
 
     BLOCKS_SIZE: 10000,
     POLLER_PERIOD_MS: 1000,
-    DATA_CONSINSTENCY_PERIOD_MS: 2000
+    CLEANER_PERIOD_MS: 2000
 };
 
 // Pull overrides from environment variables

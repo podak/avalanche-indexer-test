@@ -10,7 +10,7 @@ export const Transaction = new Schema({
     gas: Number,
     gasPrice: Number,
     maxFeePerGas: Number,
-    maxPriorityFeePerGase: Number,
+    maxPriorityFeePerGas: Number,
     input: String,
     nonce: Number,
     to: String,

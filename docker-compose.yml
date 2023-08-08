@@ -17,7 +17,67 @@ services:
         build: '.'
         working_dir: '/app'
         env_file: '.env'
-        command: ['dumb-init', 'npm', 'start']
+        command: ['dumb-init', 'npm', 'run', 'start-poller']
+        depends_on:
+            - 'rabbit'
+            - 'db'
+            - 'downloader'
+        links:
+            - 'rabbit'
+            - 'db'
+        volumes:
+            - './:/app'
+    
+    cleaner:
+        build: '.'
+        working_dir: '/app'
+        env_file: '.env'
+        command: ['dumb-init', 'npm', 'run', 'start-cleaner']
+        depends_on:
+            - 'rabbit'
+            - 'db'
+        links:
+            - 'rabbit'
+            - 'db'
+        volumes:
+            - './:/app'
+
+    downloader:
+        build: '.'
+        working_dir: '/app'
+        env_file: '.env'
+        command: ['dumb-init', 'npm', 'run', 'start-downloader']
+        depends_on:
+            - 'rabbit'
+            - 'db'
+            - 'updater'
+        links:
+            - 'rabbit'
+            - 'db'
+        volumes:
+            - './:/app'
+
+    updater:
+        build: '.'
+        working_dir: '/app'
+        env_file: '.env'
+        command: ['dumb-init', 'npm', 'run', 'start-updater']
+        depends_on:
+            - 'rabbit'
+            - 'db'
+        links:
+            - 'rabbit'
+            - 'db'
+        volumes:
+            - './:/app'
+
+    api:
+        build: '.'
+        working_dir: '/app'
+        env_file: '.env'
+        ports:
+            - 8080:8080
+        command: ['dumb-init', 'npm', 'run', 'start-api']
         depends_on:
             - 'rabbit'
             - 'db'

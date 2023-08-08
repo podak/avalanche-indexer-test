@@ -19,7 +19,29 @@ export const Block = new Schema({
     stateRoot: String,
     timestamp: String,
     totalDifficulty: Number,
-    transactions: [String],
+    transactions: [{
+        hash: String,
+        blockHash: String,
+        blockNumber: Number,
+        from: String,
+        gas: Number,
+        gasPrice: Number,
+        maxFeePerGas: Number,
+        maxPriorityFeePerGas: Number,
+        input: String,
+        nonce: Number,
+        to: String,
+        transactionIndex: Number,
+        value: Number,
+        type: {
+            type: String
+        },
+        accessList: [String],
+        chainId: Number,
+        v: String,
+        r: String,
+        s: String
+    }],
     transactionsRoot: String
 });
 

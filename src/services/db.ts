@@ -35,7 +35,7 @@ export class DBClient {
     }
 
     public async disconnect() {
-        this.connection.disconnect();
+        await this.connection.disconnect();
         this.addresses = null;
         this.blocks = null;
         this.downloads = null;

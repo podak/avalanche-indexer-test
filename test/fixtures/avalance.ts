@@ -27,6 +27,18 @@ any {
     return {...defaults, ...nonDefaultProps};
 }
 
+export function getAddressBalanceFixture (
+    nonDefaultProps: Partial<object> = {}):
+any {
+    const defaults = {
+        result: '0x57f1ad004526574',
+        id:1,
+        jsonrpc: '2.0'
+    };
+
+    return {...defaults, ...nonDefaultProps};
+}
+
 export function blockByNumberResponseFixture (
     nonDefaultProps: Partial<object> = {}):
 any {

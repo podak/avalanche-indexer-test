@@ -1,6 +1,6 @@
 import nock from 'nock';
 import { expect } from 'chai';
-import { process } from '../../src/poller';
+import { process } from '../../src/components/poller';
 import {
     db,
     setupDownloads,
@@ -75,6 +75,7 @@ describe('Poller testing', () => {
         await db.connect();
         const storedDownloads = await db.downloads.find();
         const queuedDownloads = queue.getMessages();
+        queue.done();
         // we should be downloading 10000 blocks - the 2 already downloaded/initiated
         // stored downloads should be 9999 (9998 + previous stored one)
         expect(storedDownloads.length).to.equal(9999);

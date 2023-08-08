@@ -12,7 +12,12 @@
     "test": "AWS_ACCESS_KEY_ID=not-a-key AWS_SECRET_ACCESS_KEY=not-a-sec NODE_ENV=test nyc --all --check-coverage mocha --timeout 10000 --recursive --exit dist/test",
     "posttest": "tslint src/**/*.ts",
     "pretestinspect": "npm run build",
-    "testinspect": "AWS_ACCESS_KEY_ID=not-a-key AWS_SECRET_ACCESS_KEY=not-a-sec mocha --timeout 10000 --inspect-brk=0.0.0.0 --recursive --exit dist/test"
+    "testinspect": "AWS_ACCESS_KEY_ID=not-a-key AWS_SECRET_ACCESS_KEY=not-a-sec mocha --timeout 10000 --inspect-brk=0.0.0.0 --recursive --exit dist/test",
+    "start-poller": "node /app/dist/src/launchers/poller",
+    "start-downloader": "node /app/dist/src/launchers/downloader",
+    "start-updater": "node /app/dist/src/launchers/updater",
+    "start-cleaner": "node /app/dist/src/launchers/cleaner",
+    "start-api": "node /app/dist/src/launchers/api"
   },
   "dependencies": {
     "ajv": "6.10.0",
@@ -21,7 +26,8 @@
     "winston": "3.10.0",
     "axios": "1.4.0",
     "mongoose": "7.4.2",
-    "amqplib": "0.10.3"
+    "amqplib": "0.10.3",
+    "fastify": "4.19.2"
   },
   "devDependencies": {
     "@types/md5": "2.3.0",

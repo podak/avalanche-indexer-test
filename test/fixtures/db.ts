@@ -1,7 +1,7 @@
 import {DBClient} from '../../src/services/db';
 import {config} from '../../src/config';
 import { AddressDB, BlockDB, TransactionDB, DownloadDB } from '../../src/types';
-import { hash } from '../../src/utils'
+import { hash } from '../../src/utils';
 
 export const db = new DBClient();
 
@@ -80,7 +80,7 @@ export function dbBlockFixture(
         stateRoot: randomHash(),
         timestamp: (new Date()).toISOString(),
         totalDifficulty: 100,
-        transactions: [randomHash()],
+        transactions: [dbTransactionFixture()],
         transactionsRoot: randomHash()
     };
 
@@ -98,7 +98,7 @@ export function dbTransactionFixture(
         gas: 100,
         gasPrice: 100,
         maxFeePerGas: 100,
-        maxPriorityFeePerGase: 100,
+        maxPriorityFeePerGas: 100,
         input: '',
         nonce: 0,
         to: randomHash(),

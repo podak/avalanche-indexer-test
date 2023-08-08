@@ -12,23 +12,6 @@ setup() {
     docker-compose run --rm dev npm install
 }
 
-setup-prod() {
-    clean
-    docker-compose run --rm dev npm install --production
-}
-
-testinspect() {
-    rm -rf dist/
-    docker-compose run --rm dev npm run testinspect
-}
-
-timeouter() {
-    docker-compose run --rm timeouter npm run build
-    docker-compose stop timeouter || true
-    docker-compose rm timeouter || true
-    docker-compose up -d timeouter
-}
-
 test() {
     rm -rf dist/
     docker-compose run --rm dev npm test
@@ -36,21 +19,7 @@ test() {
 
 build() {
     rm -rf dist/
-    docker-compose run --rm dev npm run package
-}
-
-migrate() {
     docker-compose run --rm dev npm run build
-    docker-compose run --rm dev typeorm migration:run
-}
-
-generate-migrations() {
-    if [ "$1" == "" ]; then
-        echo "Supply a base migration name, eg ./manage.sh generate-migrations AddFields"
-        exit 1
-    fi
-    docker-compose run --rm dev npm run build
-    docker-compose run --rm dev typeorm migration:generate -n $1
 }
 
 init-db() {
@@ -66,12 +35,28 @@ init-rabbit() {
     docker-compose up rabbit
 }
 
-qaa() {
-    if [ -z "$1" ]; then
-        docker-compose run --rm qaa npm run qaa
-    else
-        docker-compose run --rm qaa npm run qaa -- --tags=@$1
-    fi
+init-poller() {
+    docker-compose stop poller || true
+    docker-compose rm poller || true
+    docker-compose up poller
+}
+
+init-cleaner() {
+    docker-compose stop cleaner || true
+    docker-compose rm cleaner || true
+    docker-compose up cleaner
+}
+
+init-downloader() {
+    docker-compose stop downloader || true
+    docker-compose rm downloader || true
+    docker-compose up downloader
+}
+
+init-updater() {
+    docker-compose stop updater || true
+    docker-compose rm updater || true
+    docker-compose up updater
 }
 
 $@
