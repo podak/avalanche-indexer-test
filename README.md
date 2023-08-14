@@ -58,7 +58,6 @@ docker-compose down
 ```
 
 ## Known issues & room for improvements
-- The unit tests have some kind of interdependency issue that at a certain point disable the connection with the rabbit-mq queues if all the test files are launched together. They do work singularly. All the endpoints still need to be tested with a decent amount of information stored in the DB
-It is quite annoying and therefore should be fixed
+- Unit tests for downloader has been disabled because corrupt the ones of the updater component. They need to be fixed
+- Unit test set should be increased to meet the coverage minimum requirements
 - The api part has been rushed, the endpoint should be rewritten to all use the GET method. The unit tests are also missing.
-- After few minutes of working, the downloader starts to receive the error '"code":"ECONNREFUSED"' when it make any request toward the public avalanche node. Not sure if making too many requests in parallel the  application has hitted already the node maximum quota

@@ -16,12 +16,6 @@ import {
     mockAvalancheNode,
     getAddressBalanceFixture
 } from '../fixtures/avalance';
-import {
-    DownloadModel
-} from '../../src/schema/download';
-import {
-    DownloadQueue
-} from '../../src/types';
 import { RabbitMQWriter } from '../../src/services/rabbitmq-writer';
 import { config } from '../../src/config';
 import { QueueRouteKeys } from '../../src/types';
@@ -43,11 +37,7 @@ describe('Updater testing', () => {
         await cleanAddresses();
         await cleanTransactions();
         await cleanBlocks();
-        try {
-            await db.disconnect();
-        } catch (e) {
-            // there are some conflicts happening between the tests, needs to be fixed
-        }
+        await db.disconnect();
         await stop();
     });
 

@@ -14,7 +14,6 @@ import {
     mockAvalancheNode,
     lastBlockResponseFixture
 } from '../fixtures/avalance';
-import { config } from '../../src/config';
 
 describe('Cleaner testing', () => {
 
