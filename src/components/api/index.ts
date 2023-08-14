@@ -1,7 +1,8 @@
 import Fastify, { FastifyRequest } from 'fastify';
 import { 
     BnTiSortedTxRequest,
-    AddressTxNumberRequest
+    AddressTxNumberRequest,
+    PaginatedRequest
  } from '../../types';
 import { 
     BnTiSortedTxRequestSchema,
@@ -12,6 +13,7 @@ import {
 import {
     DBClient
 } from '../../services/db';
+import { config } from '../../config';
 
 const fastify = Fastify({
     logger: true
@@ -32,8 +34,8 @@ fastify.route({
     method: 'GET',
     url: '/blockNTransactionIndexSortedTransactions',
     schema: BnTiSortedTxRequestSchema,
-    handler: async (request: FastifyRequest<{ Querystring: BnTiSortedTxRequest }>, reply) => {
-        const { type, address } = request.query;
+    handler: async (request: FastifyRequest<{ Querystring: BnTiSortedTxRequest }>) => {
+        const { type, address, page } = request.query;
         const storedAddress = await db.addresses.find({hash: address});
 
         if (storedAddress.length === 0) {
@@ -47,15 +49,22 @@ fastify.route({
             hashes = storedAddress[0].receivedTx;
         }
 
+        const parsedPage = isNaN(page) ? 0 : Math.max(page - 1, 0);
+        const totalTransactions = await db.transactions.find({
+            hash: {$in: hashes}
+        }).count();
         const storedTransactions = await db.transactions.find({
             hash: {$in: hashes}
         }).sort({
             blockNumber: 1,
             transactionIndex: 1
-        });
+        }).limit(config.MAX_API_RESULTS).skip(parsedPage * config.MAX_API_RESULTS);
 
         return {
-            transactions: storedTransactions
+            page: parsedPage + 1,
+            lastPage: Math.floor(totalTransactions/config.MAX_API_RESULTS) + 1,
+            count: storedTransactions.length,
+            transactions: storedTransactions,
         }
     }
 });
@@ -88,9 +97,20 @@ fastify.route({
     method: 'GET',
     url: '/transactionsByValue',
     schema: ValueSortedTxRequestSchema,
-    handler: async () => {
-        const transactions = await db.transactions.find().sort({value: 1});
-        return { transactions }
+    handler: async (request: FastifyRequest<{ Querystring: PaginatedRequest }>) => {
+        const { page } = request.query;
+        const parsedPage = isNaN(page) ? 0 : Math.max(page - 1, 0);
+
+        const totalTransactions = await db.transactions.find().count();
+        const transactions = await db.transactions.find().sort({
+            value: 1
+        }).limit(config.MAX_API_RESULTS).skip(parsedPage * config.MAX_API_RESULTS);
+        return {
+            page: parsedPage + 1,
+            lastPage: Math.floor(totalTransactions/config.MAX_API_RESULTS) + 1,
+            count: transactions.length,
+            transactions 
+        }
     }
 });
 

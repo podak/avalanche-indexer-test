@@ -43,7 +43,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/blockNTransactionIndexSortedTransactions?address=0x5ebe880c4d340892da1b0f32798a7a28e17e6e65&type=received",
+					"raw": "http://localhost:8080/blockNTransactionIndexSortedTransactions?address=0x2f6f07cdcf3588944bf4c42ac74ff24bf56e7590&type=received&page=2",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -55,11 +55,15 @@
 					"query": [
 						{
 							"key": "address",
-							"value": "0x5ebe880c4d340892da1b0f32798a7a28e17e6e65"
+							"value": "0x2f6f07cdcf3588944bf4c42ac74ff24bf56e7590"
 						},
 						{
 							"key": "type",
 							"value": "received"
+						},
+						{
+							"key": "page",
+							"value": "2"
 						}
 					]
 				}
@@ -84,7 +88,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/addressNumberTransactions?type=received&address=0x5ebe880c4d340892da1b0f32798a7a28e17e6e65",
+					"raw": "http://localhost:8080/addressNumberTransactions?type=received&address=0x2f6f07cdcf3588944bf4c42ac74ff24bf56e7590",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -100,7 +104,7 @@
 						},
 						{
 							"key": "address",
-							"value": "0x5ebe880c4d340892da1b0f32798a7a28e17e6e65"
+							"value": "0x2f6f07cdcf3588944bf4c42ac74ff24bf56e7590"
 						}
 					]
 				}
@@ -125,7 +129,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/transactionsByValue",
+					"raw": "http://localhost:8080/transactionsByValue?page=170",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -133,6 +137,12 @@
 					"port": "8080",
 					"path": [
 						"transactionsByValue"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "170"
+						}
 					]
 				}
 			},

@@ -78,13 +78,17 @@ export enum QueueRouteKeys {
     UPDATE_ADDRESS = 'address'
 }
 
-export interface BnTiSortedTxRequest {
+export interface BnTiSortedTxRequest extends PaginatedRequest {
     type: string,
     address: string
 }
 
-export interface AddressTxNumberRequest {
+export interface AddressTxNumberRequest extends PaginatedRequest {
     type: string,
     address: string
+}
+
+export interface PaginatedRequest {
+    page?: number
 }
 

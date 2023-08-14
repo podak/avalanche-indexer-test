@@ -7,13 +7,17 @@ export const BnTiSortedTxRequestSchema = {
                 type: 'string',
                 enum: ['sent', 'received']
             },
-            address: { type: 'string' }
+            address: {type: 'string'},
+            page: {type: 'number'}
         }
     },
     response: {
         200: {
             type: 'object',
             properties: {
+                count: {type: 'number'},
+                page: {type: 'number'},
+                lastPage: {type: 'number'},
                 transactions: {
                     type: 'array',
                     properties: {
@@ -93,7 +97,8 @@ export const AddressTxNumberRequestSchema = {
                 type: 'string',
                 enum: ['sent', 'received']
             },
-            address: { type: 'string' }
+            address: {type: 'string'},
+            page: {type: 'number'}
         }
     },
     response: {
@@ -109,10 +114,19 @@ export const AddressTxNumberRequestSchema = {
 }
 
 export const ValueSortedTxRequestSchema = {
+    querystring: {
+        type: 'object',
+        properties: {
+            page: {type: 'number'}
+        }
+    },
     response: {
         200: {
             type: 'object',
             properties: {
+                count: {type: 'number'},
+                page: {type: 'number'},
+                lastPage: {type: 'number'},
                 transactions: {
                     type: 'array',
                     properties: {

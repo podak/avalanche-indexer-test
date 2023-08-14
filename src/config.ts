@@ -26,7 +26,9 @@ export const config = {
     BLOCKS_SIZE: 10000,
     POLLER_PERIOD_MS: 1000,
     CLEANER_PERIOD_MS: 2000,
-    MAX_BLOCK_PER_CYCLE: 3,
+    MAX_BLOCK_PER_CYCLE: 10,
+
+    MAX_API_RESULTS: 100
 };
 
 // Pull overrides from environment variables
