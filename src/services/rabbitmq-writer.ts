@@ -1,4 +1,3 @@
-import amqplib = require('amqplib');
 import { RabbitMQGeneric } from './rabbitmq-generic';
 import { logger } from '../logger';
 

@@ -3,7 +3,6 @@ import {config} from '../config';
 import {logger} from '../logger';
 import { BlockDB, TransactionDB } from '../types';
 
-const AVALANCHE_BASE = `${config.AVALANCHE_NODE_URL}:${config.AVALANCHE_NODE_PORT}/ext/bc/C/rpc`;
 const SHARED_PARAMS = {
     jsonrpc: '2.0',
     id: config.AVALANCHE_NETWORK_ID
@@ -13,7 +12,7 @@ export async function getAddressBalance(hash: string): Promise<number> {
     let resp;
 
     try {
-        resp = await axios.post(`${AVALANCHE_BASE}`, {
+        resp = await axios.post(config.AVALANCHE_NODE_URL, {
             ...SHARED_PARAMS,
             method: 'eth_getBalance',
             params: [hash, 'latest']
@@ -33,9 +32,13 @@ export async function getLastBlockNumber(): Promise<number> {
     let resp;
 
     try {
-        resp = await axios.post(`${AVALANCHE_BASE}`, {
+        resp = await axios.post(config.AVALANCHE_NODE_URL, {
             ...SHARED_PARAMS,
             method: 'eth_blockNumber'
+        },{
+            headers: {
+                'User-Agent': 'curl/7.29.0'
+            }
         });
 
     } catch (e) {
@@ -52,7 +55,7 @@ export async function getBlockByNumber(n: number): Promise<BlockDB> {
     let resp;
 
     try {
-        resp = await axios.post(`${AVALANCHE_BASE}`, {
+        resp = await axios.post(config.AVALANCHE_NODE_URL, {
             ...SHARED_PARAMS,
             method: 'eth_getBlockByNumber',
             params: [`0x${n.toString(16)}`, true]

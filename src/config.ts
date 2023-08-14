@@ -1,9 +1,7 @@
 import { overwriteFromEnv } from './utils';
 
 export const config = {
-    AVALANCHE_NODE_URL: 'https://api.avax.network', 
-    AVALANCHE_NODE_PORT: 443, 
-    AVALANCHE_NODE_PROTOCOL: 'https',
+    AVALANCHE_NODE_URL: 'https://api.avax.network/ext/bc/C/rpc', 
     AVALANCHE_NETWORK_ID: 1,
 
     DB_URL: 'db',
@@ -27,7 +25,8 @@ export const config = {
 
     BLOCKS_SIZE: 10000,
     POLLER_PERIOD_MS: 1000,
-    CLEANER_PERIOD_MS: 2000
+    CLEANER_PERIOD_MS: 2000,
+    MAX_BLOCK_PER_CYCLE: 3,
 };
 
 // Pull overrides from environment variables

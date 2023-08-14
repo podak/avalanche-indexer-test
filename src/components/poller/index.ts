@@ -7,6 +7,10 @@ import { DBClient } from '../../services/db';
 import { RabbitMQWriter } from '../../services/rabbitmq-writer';
 import { asyncSleep } from '../../utils';
 
+const db = new DBClient();
+const writer = new RabbitMQWriter();
+
+
 export async function main(): Promise<void> {
     logger.info('Avalanche indexer poller started.');
     while (true) {
@@ -14,31 +18,20 @@ export async function main(): Promise<void> {
             await process();
         } catch(e) {
             logger.error('An error raised during the execution:', {error: e});
+            await asyncSleep(config.POLLER_PERIOD_MS);
         }
     }
 }
 
 export async function process(): Promise<void> {
     const startDttm = Date.now();
-    const db = new DBClient();
-    await db.connect();
-    const writer = new RabbitMQWriter();
 
-    let blockNumber;
-    try {
-        blockNumber = await getLastBlockNumber();
-    } catch(e) {
-        if (e.code && e.code === 'ECONNREFUSED') {
-            logger.error('Got ECONNREFUSED, trying to pause for 10 seconds');
-            await asyncSleep(10000);
-            // try with a new loop
-            return;
-        }
-    }
+    const blockNumber = await getLastBlockNumber();
     const oldestBlock = blockNumber - config.BLOCKS_SIZE;
 
     // check what are the missing blocks
-    const missing = await getMissingBlocks(db, oldestBlock);
+    await db.connect();
+    const missing = await getMissingBlocks(db, oldestBlock, config.MAX_BLOCK_PER_CYCLE);
     if (missing.length > 0) {
         logger.info('Retrieved missing blocks that need to be downloaded.', {
             n: missing.length, 
@@ -68,8 +61,8 @@ export async function process(): Promise<void> {
     const endDttm = Date.now();
     const timeDelta = endDttm - startDttm;
     if (timeDelta < config.POLLER_PERIOD_MS) {
-        logger.info('Poller will sleep before next cycle', {sleepMs: timeDelta});
-        await asyncSleep(config.POLLER_PERIOD_MS);
+        logger.info('Poller will sleep before next cycle', {sleepMs: config.POLLER_PERIOD_MS - timeDelta});
+        await asyncSleep(config.POLLER_PERIOD_MS - timeDelta);
     } else {
         logger.warning('Polling has taken more than expected. Next cycle will start immediately', {durationMs: timeDelta});
     }
@@ -77,13 +70,14 @@ export async function process(): Promise<void> {
 
 async function getMissingBlocks(
     db: DBClient,
-    oldestBlock: number
+    oldestBlock: number,
+    limit: number
 ): Promise<number[]> {
     const blockNumbersSet =[...Array(config.BLOCKS_SIZE).keys()].map((bn) => (bn + oldestBlock));
     const storedBlocks = (await db.blocks.find({})).map((b) => (b.number));
     const blocksInProgress = (await db.downloads.find({})).map((d) => (d.blockNumber));
     return blockNumbersSet.filter((bn) => (
         !( storedBlocks.includes(bn) || blocksInProgress.includes(bn) )
-    ));
+    )).slice(0, limit);
 }
 

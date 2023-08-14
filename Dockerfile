@@ -2,7 +2,7 @@
 FROM node:20-alpine
 
 # Install some dependencies
-RUN apk --update add git zip curl dumb-init && \
+RUN apk --update add curl dumb-init && \
     rm -rf /var/cache/apk/*
 
 ENV PATH ./node_modules/.bin:$PATH
