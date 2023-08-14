@@ -7,7 +7,8 @@ The general architecture of the application is represented by the schema below:
 
 I decided to design the system as a microservices application. There are in total 5 components:
 - The node poller is responsable to retrieve the newest blocks every second. At every cycle, it checks what is the latest block number from the blockchain node, compares it to the blocks that have been stored in the DB, find the missing blocks in the list and schedule their download posting a series of messages in the Download queue.
-When the application is executed for the first time, it schedule the download of all the 10000 blocks.
+When the application is executed for the first time, it schedule the download of the most recent block + the most recent MAX_BLOCK_PER_CYCLE (environmental variable) that are currently missing in the DB. 
+If MAX_BLOCK_PER_CYCLE is set to 10, the poller will take about 1000 cycles (1000 seconds) to download all the 10000 blocks.
 - The block downloader receives the download orders inserted in the queue, downloads the related blocks from the node and propagate its elements to the Update queues.
 - The updater is the component that process and store all the information retrieved from the node in the DB. It can be further decomposed in 3 parts:
     - The transactions updater stores all the transaction of the processed block in the database as they are (for future application it can be used to infer other transaction-related metrics)
@@ -20,7 +21,8 @@ When the application is executed for the first time, it schedule the download of
     ```
     {
         "address": "0x0000000000000000000000000",
-        "type": "received" | "sent"
+        "type": "received" | "sent",
+        "page": 0 // pagination
     }
     ```
     - GET http://localhost:8080/addressNumberTransactions returns the number of transactions sent or received by an address
@@ -31,6 +33,11 @@ When the application is executed for the first time, it schedule the download of
     }
     ```
     - GET http://localhost:8080/transactionsByValue returns a list of transactions ordered by value
+    ```
+    {
+        "page": 0 // pagination
+    }
+    ```
     - GET http://localhost:8080/top100BalanceAddresses returns a list of the richest 100 address that sent or received a transaction
 
 The api has been implemented using the Fastify library
@@ -57,7 +64,9 @@ docker-compose up
 docker-compose down
 ```
 
+## Postman
+To facilitate the interaction with the api, you can download the [collection](indexer.postman_collection.json) and import it in postman
+
 ## Known issues & room for improvements
 - Unit tests for downloader has been disabled because corrupt the ones of the updater component. They need to be fixed
 - Unit test set should be increased to meet the coverage minimum requirements
-- Would be better to add the pagination to the api responses
