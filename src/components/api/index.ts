@@ -29,11 +29,11 @@ fastify.route({
 });
 
 fastify.route({
-    method: 'POST',
+    method: 'GET',
     url: '/blockNTransactionIndexSortedTransactions',
     schema: BnTiSortedTxRequestSchema,
-    handler: async (request: FastifyRequest<{ Body: BnTiSortedTxRequest }>, reply) => {
-        const { type, address } = request.body;
+    handler: async (request: FastifyRequest<{ Querystring: BnTiSortedTxRequest }>, reply) => {
+        const { type, address } = request.query;
         const storedAddress = await db.addresses.find({hash: address});
 
         if (storedAddress.length === 0) {
@@ -61,11 +61,11 @@ fastify.route({
 });
 
 fastify.route({
-    method: 'POST',
+    method: 'GET',
     url: '/addressNumberTransactions',
     schema: AddressTxNumberRequestSchema,
-    handler: async (request: FastifyRequest<{ Body: AddressTxNumberRequest }>, reply) => {
-        const { type, address } = request.body;
+    handler: async (request: FastifyRequest<{ Querystring: AddressTxNumberRequest }>, reply) => {
+        const { type, address } = request.query;
         const storedAddress = await db.addresses.find({hash: address});
 
         let count = 0;
@@ -88,7 +88,7 @@ fastify.route({
     method: 'GET',
     url: '/transactionsByValue',
     schema: ValueSortedTxRequestSchema,
-    handler: async (request, reply) => {
+    handler: async () => {
         const transactions = await db.transactions.find().sort({value: 1});
         return { transactions }
     }
@@ -98,7 +98,7 @@ fastify.route({
     method: 'GET',
     url: '/top100BalanceAddresses',
     schema: Top100BalancesRequestSchema,
-    handler: async (request, reply) => {
+    handler: async () => {
         const addresses = await db.addresses.find().sort({balance: -1}).limit(100);
         return { addresses }
     }

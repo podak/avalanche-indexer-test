@@ -1,5 +1,5 @@
 export const BnTiSortedTxRequestSchema = {
-    body: {
+    querystring: {
         type: 'object',
         required: ['type', 'address'],
         properties: {
@@ -85,7 +85,7 @@ export const BnTiSortedTxRequestSchema = {
 }
 
 export const AddressTxNumberRequestSchema = {
-    body: {
+    querystring: {
         type: 'object',
         required: ['type', 'address'],
         properties: {

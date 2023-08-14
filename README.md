@@ -16,14 +16,14 @@ When the application is executed for the first time, it schedule the download of
 - The cleaner (data consistency worker) is executed every 2 minutes to remove all the old data (older than 10000 blocks) from the DB
 - The api provides access to a subset of the information stored in the DB. As requested in the assignement, I implemented the following endpoints:
     - GET http://localhost:8080/ping can be useful to test if the api is live
-    - POST http://localhost:8080/blockNTransactionIndexSortedTransactions returns the list of transactions sent or received from a specific address, ordered by blockNumber and transactionIndex. It accepts the following parameters
+    - GET http://localhost:8080/blockNTransactionIndexSortedTransactions returns the list of transactions sent or received from a specific address, ordered by blockNumber and transactionIndex. It accepts the following parameters
     ```
     {
         "address": "0x0000000000000000000000000",
         "type": "received" | "sent"
     }
     ```
-    - POST http://localhost:8080/addressNumberTransactions returns the number of transactions sent or received by an address
+    - GET http://localhost:8080/addressNumberTransactions returns the number of transactions sent or received by an address
     ```
     {
         "address": "0x0000000000000000000000000",
@@ -60,4 +60,4 @@ docker-compose down
 ## Known issues & room for improvements
 - Unit tests for downloader has been disabled because corrupt the ones of the updater component. They need to be fixed
 - Unit test set should be increased to meet the coverage minimum requirements
-- The api part has been rushed, the endpoint should be rewritten to all use the GET method. The unit tests are also missing.
+- Would be better to add the pagination to the api responses
