@@ -1,8 +1,9 @@
 {
 	"info": {
-		"_postman_id": "ea33b36f-520f-474d-827a-2d89cd00b780",
+		"_postman_id": "a8daabd6-0ff8-46a9-aa2a-594f844b612d",
 		"name": "Avascan Test",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "12320970"
 	},
 	"item": [
 		{
@@ -26,12 +27,15 @@
 		},
 		{
 			"name": "transactionsSortedByblockNTindex",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
 			"request": {
-				"method": "POST",
+				"method": "GET",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"address\": \"asdasdasadasd\",\n    \"type\": \"received\"\n}",
+					"raw": "",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -39,7 +43,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/blockNTransactionIndexSortedTransactions",
+					"raw": "http://localhost:8080/blockNTransactionIndexSortedTransactions?address=0x5ebe880c4d340892da1b0f32798a7a28e17e6e65&type=received",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -47,6 +51,16 @@
 					"port": "8080",
 					"path": [
 						"blockNTransactionIndexSortedTransactions"
+					],
+					"query": [
+						{
+							"key": "address",
+							"value": "0x5ebe880c4d340892da1b0f32798a7a28e17e6e65"
+						},
+						{
+							"key": "type",
+							"value": "received"
+						}
 					]
 				}
 			},
@@ -54,12 +68,15 @@
 		},
 		{
 			"name": "nTransactionsByAddress",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
 			"request": {
-				"method": "POST",
+				"method": "GET",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"address\": \"asdasdasadasd\",\n    \"type\": \"received\"\n}",
+					"raw": "",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -67,7 +84,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/addressNumberTransactions",
+					"raw": "http://localhost:8080/addressNumberTransactions?type=received&address=0x5ebe880c4d340892da1b0f32798a7a28e17e6e65",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -75,6 +92,16 @@
 					"port": "8080",
 					"path": [
 						"addressNumberTransactions"
+					],
+					"query": [
+						{
+							"key": "type",
+							"value": "received"
+						},
+						{
+							"key": "address",
+							"value": "0x5ebe880c4d340892da1b0f32798a7a28e17e6e65"
+						}
 					]
 				}
 			},
