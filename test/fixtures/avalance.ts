@@ -1,14 +1,14 @@
 import nock from 'nock';
 import {config} from '../../src/config';
 
-const AVALANCHE_BASE = `${config.AVALANCHE_NODE_URL}:${config.AVALANCHE_NODE_PORT}`
+const url = new URL(config.AVALANCHE_NODE_URL); 
 
 export function mockAvalancheNode(
     optional: boolean = false,
     code = 200,
     response_body: any = {code: 200, message: 'OK'}) {
-    return nock(AVALANCHE_BASE)
-        .post('/ext/bc/C/rpc')
+    return nock(`${url.protocol}//${url.host}:${url.port}`)
+        .post(url.pathname)
         .optionally(optional)
         .reply(() => {
             return [code, response_body];

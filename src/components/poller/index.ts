@@ -78,6 +78,9 @@ async function getMissingBlocks(
     const blocksInProgress = (await db.downloads.find({})).map((d) => (d.blockNumber));
     return blockNumbersSet.filter((bn) => (
         !( storedBlocks.includes(bn) || blocksInProgress.includes(bn) )
-    )).slice(0, limit);
+    )).sort(
+        // DESC sorting
+        (n1, n2) => (n2 - n1)
+    ).slice(0, limit);
 }
 

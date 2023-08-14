@@ -39,15 +39,15 @@ describe('Poller testing', () => {
         await db.disconnect();
     });
 
-    it('1 block is stored in DB, 1 is in download, poller should instantiate other 9998 downloads in the queue and in the download collection of the DB', async () => {
+    it('1 block is stored in DB, 1 is in download, poller should instantiate other ${config.MAX_BLOCK_PER_CYCLE} downloads in the queue and in the download collection of the DB', async () => {
         const lastBlock = 20000;
         // setup DB
         const dbBlock = dbBlockFixture({
-            number: lastBlock - config.BLOCKS_SIZE
+            number: lastBlock - 1
         });
 
         const dbDownload = dbDownloadFixture({
-            blockNumber: lastBlock + 1 - config.BLOCKS_SIZE
+            blockNumber: lastBlock
         });
 
         await db.connect();
@@ -76,16 +76,22 @@ describe('Poller testing', () => {
         const storedDownloads = await db.downloads.find();
         const queuedDownloads = queue.getMessages();
         queue.done();
-        // we should be downloading 10000 blocks - the 2 already downloaded/initiated
-        // stored downloads should be 9999 (9998 + previous stored one)
-        expect(storedDownloads.length).to.equal(9999);
+        
+        // there should be stored the previous download + the config.MAX_BLOCK_PER_CYCLE new ones
+        expect(storedDownloads.length).to.equal(config.MAX_BLOCK_PER_CYCLE + 1);
         expect(storedDownloads[1]).to.deep.include({
-            blockNumber: lastBlock - config.BLOCKS_SIZE + 2
+            blockNumber: lastBlock - 2
         });
-        // queued downloads should be 9998
-        expect(queuedDownloads.length).to.equal(9998);
+        expect(storedDownloads[storedDownloads.length - 1]).to.deep.include({
+            blockNumber: lastBlock - config.MAX_BLOCK_PER_CYCLE - 1
+        });
+
+        expect(queuedDownloads.length).to.equal(config.MAX_BLOCK_PER_CYCLE);
         expect(queuedDownloads[0]).to.deep.include({
-            blockNumber: lastBlock - config.BLOCKS_SIZE + 2
+            blockNumber: lastBlock - 2
+        });
+        expect(queuedDownloads[queuedDownloads.length - 1]).to.deep.include({
+            blockNumber: lastBlock - config.MAX_BLOCK_PER_CYCLE - 1
         });
     });
 });
